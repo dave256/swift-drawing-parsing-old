@@ -23,6 +23,17 @@ s 8 9
         XCTAssertEqual(shapes, expected)
     }
 
+    func testOneSquareWithName() throws {
+        let input: Substring = """
+unit square with a name
+filled red
+s 8 9
+"""
+        let shapes = try DrawableShape.zeroOrMoreParser.parse(input)
+        let expected = [DrawableShape.unitSquare(.init(name: "with a name", drawStyle: .init(style: .filled, color: .red), transforms: [.s(8, 9)]))]
+        XCTAssertEqual(shapes, expected)
+    }
+
     func testOneCircle() throws {
         let input: Substring = """
 unit circle
@@ -31,6 +42,17 @@ s 8.0 9.0
 """
         let shapes = try DrawableShape.zeroOrMoreParser.parse(input)
         let expected = [DrawableShape.unitCircle(.init(drawStyle: .init(style: .filled, color: .red), transforms: [.s(8, 9)]))]
+        XCTAssertEqual(shapes, expected)
+    }
+
+    func testOneCircleWithName() throws {
+        let input: Substring = """
+unit circle circle 1
+filled red
+s 8.0 9.0
+"""
+        let shapes = try DrawableShape.zeroOrMoreParser.parse(input)
+        let expected = [DrawableShape.unitCircle(.init(name: "circle 1", drawStyle: .init(style: .filled, color: .red), transforms: [.s(8, 9)]))]
         XCTAssertEqual(shapes, expected)
     }
 
@@ -98,6 +120,37 @@ closed green
 
     }
 
+    func testMultipleShapesWithNamesNoTransforms() throws {
+
+        let s = [
+            DrawableShape.unitSquare(UnitSquare(name: "square 1", drawStyle: .init(style: .filled, color: .red), transforms: [])),
+            DrawableShape.unitCircle(UnitCircle(name: "circle 1", drawStyle: .init(style: .closed, color: .green), transforms: [])),
+            DrawableShape.unitSquare(UnitSquare(name: "square 2", drawStyle: .init(style: .closed, color: .green), transforms: [])),
+        ]
+        let output = try DrawableShape.zeroOrMoreParser.print(s)
+        print("output")
+        print(output)
+        print("end")
+        let input: Substring = """
+unit square square 1
+filled red
+
+unit circle circle 1
+closed green
+
+unit square square 2
+closed green
+"""
+        print("input")
+        print(input)
+        print("end")
+        let shapes = try DrawableShape.zeroOrMoreParser.parse(input)
+        XCTAssertEqual(shapes, s)
+        //XCTAssertEqual(input, output)
+        dump(shapes)
+
+    }
+
     func testShapeGroup() throws {
         let input: Substring = """
 group Name for the Group
@@ -105,7 +158,7 @@ transforms
 s 2.0 3.0
 r 45
 
-unit square
+unit square name for the square
 filled red
 
 unit circle

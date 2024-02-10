@@ -160,6 +160,10 @@ public extension UnitSquare {
     /// "unit square" followed by a blank line followed by a DrawStyle (such as "filled red") followed by a blank line followed by Transforms (such as "r 45.0" or "s 2.5 3.5" or "t 1.5 2.5")
     static let parser = ParsePrint(input: Substring.self, .memberwise(UnitSquare.init)) {
         "unit square"
+        Whitespace(0..., .horizontal)
+        Consumed {
+            Prefix { $0 != "\n"}
+        }.map(.string).printing { $0 != "" ? $1.prepend(contentsOf: " \($0)") : $1.prepend(contentsOf: "") }
         Whitespace(1, .vertical)
         DrawStyle.parser
         Whitespace(0..., .vertical).printing("\n".utf8)
@@ -173,6 +177,10 @@ public extension UnitCircle {
     /// "unit circle" followed by a blank line followed by a DrawStyle (such as "filled red") followed by a blank line followed by Transforms (such as "r 45.0" or "s 2.5 3.5" or "t 1.5 2.5")
     static let parser = ParsePrint(input: Substring.self, .memberwise(UnitCircle.init)) {
         "unit circle"
+        Whitespace(0..., .horizontal)
+        Consumed {
+            Prefix { $0 != "\n"}
+        }.map(.string).printing { $0 != "" ? $1.prepend(contentsOf: " \($0)") : $1.prepend(contentsOf: "") }
         Whitespace(1, .vertical)
         DrawStyle.parser
         Whitespace(0..., .vertical).printing("\n".utf8)
