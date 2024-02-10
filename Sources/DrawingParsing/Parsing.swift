@@ -146,7 +146,7 @@ public extension Transform {
 // MARK: DrawStyle
 
 public extension DrawStyle {
-    /// "path",, "closed", or "filled" followed by one or more spaces/tabs followed by a color
+    /// "path", "closed", or "filled" followed by one or more spaces/tabs followed by a color
     static let parser = ParsePrint(input: Substring.self, .memberwise(DrawStyle.init)) {
         Style.parser()
         Whitespace(1..., .horizontal)
