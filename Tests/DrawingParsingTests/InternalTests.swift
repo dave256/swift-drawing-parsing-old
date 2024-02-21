@@ -154,7 +154,6 @@ closed green
     func testShapeGroup() throws {
         let input: Substring = """
 group Name for the Group
-transforms
 s 2.0 3.0
 r 45
 
@@ -166,7 +165,6 @@ filled green
 t 1 3
 
 group
-transforms
 
 unit circle
 filled red
@@ -177,11 +175,8 @@ unit square
 filled red
 s 3.0 5.0
 t 6 7
-
 """
         
-        let g = try DrawableShapeGroup.zeroOrMoreParser().parse(input)
+        let _ = try DrawableShapeGroup.zeroOrMoreParser().parse(input)
     }
-    
-    
 }

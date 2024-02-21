@@ -166,14 +166,12 @@ extension DrawableShapeGroup {
             Whitespace(0..., .horizontal)
             PrefixUpTo("\n").map(.string)
             Whitespace(1, .vertical)
-            "transforms\n"
-            // this will handle white space beforehand
-            Transform.zeroOrMoreParser()//.printing {
+            Transform.zeroOrMoreParser()
             Whitespace(1..., .vertical)
             DrawableShape.zeroOrMoreParser()
         }
     }
-    
+
     static func zeroOrMoreParser() -> some ParserPrinter<Substring, [DrawableShapeGroup]> {
         ParsePrint(input: Substring.self) {
             OneOf {
