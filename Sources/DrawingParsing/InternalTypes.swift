@@ -157,17 +157,11 @@ extension DrawableShapeGroup {
         // first try to handle any white space before it and consume it
         "group"
         Whitespace(0..., .horizontal)
-        Consumed {
-            Prefix { $0 != "\n"}
-        }.map(.string).printing { $0 != "" ? $1.prepend(contentsOf: " \($0)") : $1.prepend(contentsOf: "") }
-
+        PrefixUpTo("\n").map(.string)
         Whitespace(1, .vertical)
         "transforms\n"
         // this will handle white space beforehand
         Transform.zeroOrMoreParser//.printing {
-//            $0 == [] ? $1.prepend(contentsOf: "") : $1.prepend(contentsOf: try! Transform.zeroOrMoreParser.print($0) + "\n")
-//        }
-
         Whitespace(1..., .vertical)
         DrawableShape.zeroOrMoreParser
     }
