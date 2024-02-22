@@ -86,7 +86,19 @@ public extension Transform {
             }
         }
     }
-    
+
+    static func oneOrMoreParser() -> some ParserPrinter<Substring, [Transform]> {
+        Many(1...) {
+            Transform.parser()
+        } separator: {
+            Whitespace(1..., .vertical).printing("\n".utf8)
+        } 
+//    terminator: {
+//            "\n"
+//        }
+    }
+
+
     /// r followed by one or more spaces/tabs, followed by the angle in degrees
     static func rotateParsePrint() -> some ParserPrinter<Substring, Transform> {
         ParsePrint(input: Substring.self, RotateConversion()) {

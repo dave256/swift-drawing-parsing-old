@@ -161,13 +161,19 @@ internal struct DrawableShapeGroup: Drawable, Transformable, Equatable {
 extension DrawableShapeGroup {
     static func parser() -> some ParserPrinter<Substring, DrawableShapeGroup> {
         ParsePrint(input: Substring.self, .memberwise(DrawableShapeGroup.init)) {
-            // first try to handle any white space before it and consume it
+            Whitespace(0..., .vertical)
             "group"
-            Whitespace(0..., .horizontal).printing(" ".utf8)
-            PrefixUpTo("\n").map(.string)
-            Whitespace(1, .vertical)
-            Transform.zeroOrMoreParser()
-            Whitespace(1..., .vertical)
+            Comment.parser()
+            OneOf {
+                Not {
+                    Transform.parser()
+                }
+                //.printing("\n")
+                .map { [Transform]() }
+                
+                Transform.oneOrMoreParser()
+            }
+            Whitespace(0..., .vertical).printing("\n".utf8)
             DrawableShape.zeroOrMoreParser()
         }
     }
@@ -182,13 +188,13 @@ extension DrawableShapeGroup {
                     Many(1...) {
                         DrawableShapeGroup.parser()
                     } separator: {
-                        Whitespace(1..., .vertical)//.printing("\n\n".utf8)
+                        Whitespace(1..., .vertical).printing("\n\n".utf8)
                     }
-                    Whitespace()
+//                    Whitespace()
                 }
                 // if no transforms, this will leave the white space since we only consume it if there is at least one transform
                 // this is necessary so we don't need two blank lines when there are no transforms
-                Whitespace(0..., .vertical).printing("".utf8).map { [DrawableShapeGroup]() }
+                //Whitespace(0..., .vertical).printing("".utf8).map { [DrawableShapeGroup]() }
             }
         }
     }

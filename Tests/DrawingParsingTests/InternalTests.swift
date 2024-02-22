@@ -196,24 +196,22 @@ closed green
     func testShapeGroup() throws {
         let input: Substring = """
 group abc
-s 2.0 3.0
-r 45.0
 
 unit square name for the square
 filled red
 s 1.0 1.0
-
 unit circle name
 filled green
 t 1.0 3.0
 
 group def
 r 45.0
-
 unit circle
 filled red
 s 1.0 1.0
 t 2.0 3.0
+unit circle
+filled green
 
 unit square name
 filled red
@@ -228,9 +226,9 @@ t 6.0 7.0
 //filled red
 //s 1.0 1.0
 //"""
-
         let g = try DrawableShapeGroup.zeroOrMoreParser().parse(input)
         let output = try DrawableShapeGroup.zeroOrMoreParser().print(g)
-        //XCTAssertEqual(input, output)
+        print(output)
+        XCTAssertEqual(input, output)
     }
 }
