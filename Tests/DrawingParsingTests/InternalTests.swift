@@ -48,7 +48,7 @@ s 8 9
     }
 
     func testOneSquarePrint() throws {
-        let input: Substring = "unit square \nfilled red\ns 8.0 9.0"
+        let input: Substring = "unit square\nfilled red\ns 8.0 9.0"
         let shapes = try DrawableShape.zeroOrMoreParser().parse(input)
         let expected = [DrawableShape.unitSquare(.init(drawStyle: .init(style: .filled, color: .red), transforms: [.s(8, 9)]))]
         XCTAssertEqual(shapes, expected)
