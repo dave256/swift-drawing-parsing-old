@@ -9,6 +9,27 @@ import CoreGraphics
 import Drawing
 import Parsing
 
+// MARK: - Comment
+
+/// for parsing text after a shape that is a comment for the shape
+/// if a newline immediately after the shape text, then no comment and just parse the newline
+/// an Enum so can't instantiate - just use the static parser() method
+public enum Comment {
+    public static func parser() -> some ParserPrinter<Substring, String> {
+        // rest of line can have a name/comment
+        OneOf {
+            // either a space followed by comment and a newline
+            ParsePrint {
+                Whitespace(1..., .horizontal).printing(" ".utf8)
+                PrefixUpTo("\n").map(.string)
+                Whitespace(1, .vertical)
+            }
+            // or if no comment, parse the newline but use an empty string for the comment
+            Whitespace(1, .vertical).map { "" }
+        }
+    }
+}
+
 // MARK: CGPoint
 
 public extension CGPoint {
@@ -179,17 +200,7 @@ public extension UnitSquare {
     static func parser() -> some ParserPrinter<Substring, UnitSquare> {
         ParsePrint(input: Substring.self, .memberwise(UnitSquare.init)) {
             "unit square"
-            // rest of line can have a name/comment for the shape
-            OneOf {
-                // either a space followed by comment and a newline
-                ParsePrint {
-                    Whitespace(1..., .horizontal).printing(" ".utf8)
-                    PrefixUpTo("\n").map(.string)
-                    Whitespace(1, .vertical)
-                }
-                // or if no comment, parse the newline but use an empty string for the comment
-                Whitespace(1, .vertical).map { "" }
-            }
+            Comment.parser()
             DrawStyle.parser()
             Whitespace(0..., .vertical).printing("\n".utf8)
             Transform.zeroOrMoreParser()
@@ -204,17 +215,7 @@ public extension UnitCircle {
     static func parser() -> some ParserPrinter<Substring, UnitCircle> {
         ParsePrint(input: Substring.self, .memberwise(UnitCircle.init)) {
             "unit circle"
-            // rest of line can have a name/comment for the shape
-            OneOf {
-                // either a space followed by comment and a newline
-                ParsePrint {
-                    Whitespace(1..., .horizontal).printing(" ".utf8)
-                    PrefixUpTo("\n").map(.string)
-                    Whitespace(1, .vertical)
-                }
-                // or if no comment, parse the newline but use an empty string for the comment
-                Whitespace(1, .vertical).map { "" }
-            }
+            Comment.parser()
             DrawStyle.parser()
             Whitespace(0..., .vertical).printing("\n".utf8)
             Transform.zeroOrMoreParser()
