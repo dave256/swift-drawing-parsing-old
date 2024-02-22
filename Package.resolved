@@ -14,8 +14,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/dave256/swift-drawing",
       "state" : {
-        "revision" : "1daf25c5f41695577da911d0d7559f0b27290fbc",
-        "version" : "1.2.1"
+        "branch" : "devel",
+        "revision" : "cbcc4c378b4ea33ffd892065a171731c2fb8d641"
       }
     },
     {

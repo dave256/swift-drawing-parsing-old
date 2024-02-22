@@ -163,7 +163,7 @@ extension DrawableShapeGroup {
         ParsePrint(input: Substring.self, .memberwise(DrawableShapeGroup.init)) {
             // first try to handle any white space before it and consume it
             "group"
-            Whitespace(0..., .horizontal)
+            Whitespace(0..., .horizontal).printing(" ".utf8)
             PrefixUpTo("\n").map(.string)
             Whitespace(1, .vertical)
             Transform.zeroOrMoreParser()

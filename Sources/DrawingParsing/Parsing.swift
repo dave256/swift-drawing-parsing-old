@@ -16,9 +16,11 @@ public extension CGPoint {
     /// two numbers (can be int or double) separated by one or more spaces
     static func parser() -> some ParserPrinter<Substring, CGPoint> {
         ParsePrint(input: Substring.self, .memberwise(CGPoint.init(x:y:))) {
+            Whitespace(0..., .horizontal)
             Double.parser()
             Whitespace(1..., .horizontal)
             Double.parser()
+            Whitespace(0..., .horizontal)
         }
     }
     
@@ -30,10 +32,7 @@ public extension CGPoint {
             } separator: {
                 // each point must be on its own line
                 "\n"
-            } terminator: {
-                // must have a \n after last point
-                "\n".utf8
-            }
+            } 
         }
     }
 }
@@ -45,11 +44,13 @@ public extension Transform {
     // a transform is one of the rotate, scale, or translate transformation
     static func parser() -> some ParserPrinter<Substring, Transform> {
         ParsePrint(input: Substring.self) {
+            Whitespace(0..., .horizontal)
             OneOf {
                 rotateParsePrint()
                 scaleParsePrint()
                 translateParsePrint()
             }
+            Whitespace(0..., .horizontal)
         }
     }
     
@@ -57,7 +58,7 @@ public extension Transform {
     /// won't consume whitespace if there are no transforms
     static func zeroOrMoreParser() -> some ParserPrinter<Substring, [Transform]> {
         ParsePrint(input: Substring.self) {
-            Many {
+            Many(0...) {
                 Transform.parser()
             } separator: {
                 Whitespace(1, .vertical)
@@ -166,6 +167,7 @@ public extension DrawStyle {
             Style.parser()
             Whitespace(1..., .horizontal)
             Color.parser()
+            Whitespace(0..., .horizontal)
         }
     }
 }
@@ -177,7 +179,7 @@ public extension UnitSquare {
     static func parser() -> some ParserPrinter<Substring, UnitSquare> {
         ParsePrint(input: Substring.self, .memberwise(UnitSquare.init)) {
             "unit square"
-            Whitespace(0..., .horizontal)
+            Whitespace(0..., .horizontal).printing(" ".utf8)
             PrefixUpTo("\n").map(.string)
             Whitespace(1, .vertical)
             DrawStyle.parser()
@@ -194,7 +196,7 @@ public extension UnitCircle {
     static func parser() -> some ParserPrinter<Substring, UnitCircle> {
         ParsePrint(input: Substring.self, .memberwise(UnitCircle.init)) {
             "unit circle"
-            Whitespace(0..., .horizontal)
+            Whitespace(0..., .horizontal).printing(" ".utf8)
             PrefixUpTo("\n").map(.string)
             Whitespace(1, .vertical)
             DrawStyle.parser()
