@@ -197,9 +197,12 @@ public extension DrawStyle {
     /// "path", "closed", or "filled" followed by one or more spaces/tabs followed by a color
     static func parser() -> some ParserPrinter<Substring, DrawStyle> {
         ParsePrint(input: Substring.self, .memberwise(DrawStyle.init)) {
+            // allow leading spaces and tabs
+            Whitespace(0..., .horizontal)
             Style.parser()
             Whitespace(1..., .horizontal)
             Color.parser()
+            // allow trailing spaces and tabs
             Whitespace(0..., .horizontal)
         }
     }
@@ -211,6 +214,8 @@ public extension UnitSquare {
     /// "unit square" followed by a blank line followed by a DrawStyle (such as "filled red") followed by a blank line followed by Transforms (such as "r 45.0" or "s 2.5 3.5" or "t 1.5 2.5")
     static func parser() -> some ParserPrinter<Substring, UnitSquare> {
         ParsePrint(input: Substring.self, .memberwise(UnitSquare.init)) {
+            // allow leading spaces and tabs
+            Whitespace(0..., .horizontal)
             "unit square"
             Comment.parser()
             DrawStyle.parser()
@@ -226,6 +231,7 @@ public extension UnitCircle {
     /// "unit circle" followed by a blank line followed by a DrawStyle (such as "filled red") followed by a blank line followed by Transforms (such as "r 45.0" or "s 2.5 3.5" or "t 1.5 2.5")
     static func parser() -> some ParserPrinter<Substring, UnitCircle> {
         ParsePrint(input: Substring.self, .memberwise(UnitCircle.init)) {
+            Whitespace(0..., .horizontal)
             "unit circle"
             Comment.parser()
             DrawStyle.parser()
